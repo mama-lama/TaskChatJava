@@ -1,20 +1,18 @@
 package org.example.model;
 
-public class PrivateChat extends Chat{
-    public PrivateChat(int id, User user1, User user2) throws IllegalAccessException {
+public class PrivateChat extends Chat {
+    public PrivateChat(int id, User firstUser, User secondUser) {
         super(id);
 
-        if (user1.equals(user2)){
-            throw new IllegalAccessException(
-                    "Нельзя создавать приватный чат с самим собой!"
-            );
+        if (firstUser == null || secondUser == null) {
+            throw new IllegalArgumentException("Для приватного чата нужны два пользователя");
+        }
+        if (firstUser.equals(secondUser)) {
+            throw new IllegalArgumentException("Нельзя создать приватный чат пользователя с самим собой");
         }
 
-        if(user1 == null || user2 == null){
-            throw new IllegalAccessException("Для приватного чата нужны два пользователя!");
-        }
-        addUser(user1);
-        addUser(user2);
+        addUser(firstUser);
+        addUser(secondUser);
     }
 
     @Override
@@ -29,7 +27,7 @@ public class PrivateChat extends Chat{
 
     @Override
     public String getName() {
-        return getUsers().get(0).getName() + " " + getUsers().get(1).getName();
+        return getUsers().get(0).getName() + " - " + getUsers().get(1).getName();
     }
 
     @Override

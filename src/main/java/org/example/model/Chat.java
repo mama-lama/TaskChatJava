@@ -13,7 +13,7 @@ public abstract class Chat {
     private final List<Message> messages = new ArrayList<>();
     private final Set<UUID> bannedUserIds = new HashSet<>();
 
-    public Chat(int id) {
+    protected Chat(int id) {
         this.id = id;
     }
 
@@ -45,6 +45,7 @@ public abstract class Chat {
         }
         users.add(user);
     }
+
     public void removeUser(UUID userId) {
         if (!containsUser(userId)) {
             throw new IllegalArgumentException("Пользователь не состоит в чате");

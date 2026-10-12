@@ -1,14 +1,14 @@
 package org.example.model;
 
-import java.util.UUID;
 import java.util.Objects;
+import java.util.UUID;
 
 public class User {
     private final UUID id;
     private String name;
 
     public User(UUID id, String name) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id, "Индефикатор пользователя не может быть пустым");
         setName(name);
     }
 
@@ -16,33 +16,35 @@ public class User {
         return id;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     public void setName(String name) {
-        if (name == null || name.isBlank()){
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Имя пользователя не может быть пустым");
         }
         this.name = name.trim();
     }
 
     @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(obj instanceof User user)){
+        if (!(o instanceof User user)) {
             return false;
         }
         return id.equals(user.id);
     }
 
     @Override
-    public int hasCode(){
+    public int hashCode() {
         return id.hashCode();
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
 }
