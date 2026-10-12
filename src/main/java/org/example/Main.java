@@ -1,17 +1,22 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import org.example.controller.ConsoleController;
+import org.example.repository.ChatRepository;
+import org.example.repository.UserRepository;
+import org.example.repository.impl.InMemoryChatRepository;
+import org.example.repository.impl.InMemoryUserRepository;
+import org.example.service.ChatService;
+import org.example.service.UserService;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.println("Hello and welcome!");
+        UserRepository userRepository = new InMemoryUserRepository();
+        ChatRepository chatRepository = new InMemoryChatRepository();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        UserService userService = new UserService(userRepository, chatRepository);
+        ChatService chatService = new ChatService(chatRepository, userRepository);
+
+        ConsoleController consoleController = new ConsoleController(userService, chatService);
+        consoleController.run();
     }
 }
