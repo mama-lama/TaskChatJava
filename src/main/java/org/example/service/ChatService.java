@@ -29,7 +29,7 @@ public class ChatService {
         this.userRepository = userRepository;
     }
 
-    public PrivateChat createPrivateChat(UUID firstUserId, UUID secondUserId) throws IllegalAccessException {
+    public PrivateChat createPrivateChat(UUID firstUserId, UUID secondUserId) {
         if (firstUserId.equals(secondUserId)) {
             throw new IllegalArgumentException("Для приватного чата выберите двух разных пользователей");
         }

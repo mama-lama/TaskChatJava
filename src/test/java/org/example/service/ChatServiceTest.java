@@ -17,6 +17,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class ChatServiceTest {
     private UserService userService;
@@ -79,5 +81,43 @@ public class ChatServiceTest {
         chatService.sendMessage(roomChat.getId(), vlad.getId(), "Доброго дня!");
 
         assertEquals(2, chatService.getMessages(roomChat.getId()).size());
+        assertEquals("Ксения", chatService.getMessages(roomChat.getId()).get(0).getSender().getName());
+        assertEquals("Влад", chatService.getMessages(roomChat.getId()).get(1).getSender().getName());
+    }
+
+    @Test
+    void banWorksOnlyInsideSelectedChat(){
+        User ksu = userService.createUser("Ксения");
+        User vlad = userService.createUser("Влад");
+        RoomChat firstRoom = chatService.createRoom("Первая");
+        RoomChat secondRoom = chatService.createRoom("Вторая");
+
+        for (Chat chat : List.of(firstRoom, secondRoom)){
+            chatService.addUserToChat(chat.getId(), ksu.getId());
+            chatService.addUserToChat(chat.getId(), vlad.getId());
+        }
+
+        chatService.banUser(firstRoom.getId(), ksu.getId());
+
+        assertTrue(firstRoom.isBanned(ksu.getId()));
+        assertFalse(secondRoom.isBanned(ksu.getId()));
+        assertThrows(IllegalStateException.class,
+                () -> chatService.sendMessage(firstRoom.getId(), ksu.getId(), "Не отправляется сообщение!"));
+
+        chatService.sendMessage(secondRoom.getId(), ksu.getId(), "А здесь сообщение отправляется!!!");
+        assertEquals(1, secondRoom.getMessages().size());
+
+    }
+
+    @Test
+    void deletingUserDoesNotLeaveInvalidChat(){
+        User first = userService.createUser("Первый");
+        User second = userService.createUser("Второй");
+        PrivateChat privateChat = chatService.createPrivateChat(first.getId(), second.getId());
+
+        userService.deleteUser(first.getId());
+
+        assertThrows(RuntimeException.class,
+                () -> chatService.getChat(privateChat.getId()));
     }
 }
