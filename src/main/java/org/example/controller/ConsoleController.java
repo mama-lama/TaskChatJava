@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import org.example.model.Chat;
-import org.example.model.GroupChat;
 import org.example.model.Message;
 import org.example.model.User;
 import org.example.service.ChatService;
@@ -134,12 +133,7 @@ public class ConsoleController {
         System.out.println("Выберите второго пользователя:");
         User second = chooseUserFromList(remaining);
 
-        Chat chat = null;
-        try {
-            chat = chatService.createPrivateChat(first.getId(), second.getId());
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        Chat chat = chatService.createPrivateChat(first.getId(), second.getId());
         System.out.printf("Создан приватный чат '%s'. ID = %d%n", chat.getName(), chat.getId());
     }
 
