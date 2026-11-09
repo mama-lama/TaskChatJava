@@ -145,7 +145,7 @@ public class ConsoleController {
 
         System.out.print("Максимальное число участников (не меньше 3): ");
         int maxUsers = readInt();
-        if (maxUsers <= 3) {
+        if (maxUsers < 3) {
             throw new IllegalArgumentException("Максимальное число участников должно быть не меньше 3");
         }
 
