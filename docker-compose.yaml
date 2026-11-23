@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: task_chat
+      POSTGRES_USER: chat_app
+      POSTGRES_PASSWORD: chat_dev_123
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - chat_postgres_data:/var/lib/postgresql
+
+volumes:
+  chat_postgres_data:
